@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognis AI </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="neural-bg"></div>
+    <div class="gradient-overlay"></div>
+    
+    <!-- Add floating background elements -->
+    <div class="floating-element floating-circle" style="top: 20%; left: 10%;"></div>
+    <div class="floating-element floating-circle" style="top: 60%; right: 15%;"></div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">Cognis.ai</a>
+            <div class="nav-links animate__animated animate__fadeIn">
+                <a href="characters.html"><i class="fas fa-robot"></i> Characters</a>
+                <a href="create.html"><i class="fas fa-magic"></i> Create</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-image animate__animated animate__fadeIn">
+            <!-- Add light beams -->
+            <div class="light-beam beam-1"></div>
+            <div class="light-beam beam-2"></div>
+            <div class="light-beam beam-3"></div>
+            <img src="image1.jpg" alt="AI Assistant" class="main-image">
+        </div>
+        <div class="hero-content">
+            <h1 class="gradient-text">Your Perfect AI Companion</h1>
+            <p class="subtitle scroll-animate">Create and interact with unique AI characters tailored to your interests and learning goals.</p>
+            <div class="hero-buttons scroll-animate">
+                <a href="create.html" class="btn btn-primary glow animate__animated animate__pulse animate__infinite">
+                    <i class="fas fa-magic"></i> Create Your Character
+                </a>
+                <a href="characters.html" class="btn btn-secondary animate__animated animate__fadeIn">
+                    <i class="fas fa-robot"></i> View Characters
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        particlesJS('particles-js',
+        {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#00ff9d"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00ff9d",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+
+    <!-- Add scroll animation script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with scroll animation classes
+        document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // Add parallax effect to floating elements
+        document.addEventListener('mousemove', (e) => {
+            const floating = document.querySelectorAll('.floating-element');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            floating.forEach(element => {
+                const speed = element.getAttribute('data-speed') || 30;
+                const x = (window.innerWidth - (mouseX * speed));
+                const y = (window.innerHeight - (mouseY * speed));
+                element.style.transform = `translate(${-x/50}px, ${-y/50}px)`;
+            });
+        });
+    });
+    </script>
+</body>
+</html>
