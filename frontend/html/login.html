@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Cognis AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="neural-bg"></div>
+    <div class="gradient-overlay"></div>
+    
+    <!-- Enhanced floating background elements -->
+    <div class="floating-element floating-circle" style="top: 15%; left: 10%;" data-speed="20"></div>
+    <div class="floating-element floating-circle" style="top: 65%; right: 12%;" data-speed="30"></div>
+    <div class="floating-element floating-circle" style="top: 40%; left: 80%;" data-speed="25"></div>
+    <div class="floating-element floating-circle" style="top: 75%; left: 25%;" data-speed="15"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Cognis.ai</a>
+            <div class="nav-links animate__animated animate__fadeIn">
+                <a href="characters.html"><i class="fas fa-robot"></i> Characters</a>
+                <a href="create.html"><i class="fas fa-magic"></i> Create</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+                <a href="login.html" class="active"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="auth-container">
+        <div class="auth-card animate__animated animate__fadeIn">
+            <!-- Light beam effects for the card -->
+            <div class="light-beam beam-1" style="top: -50px; left: -50px;"></div>
+            <div class="light-beam beam-2" style="bottom: -50px; right: -50px;"></div>
+            
+            <h2 class="gradient-text animate__animated animate__fadeInDown">Welcome Back</h2>
+            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Sign in to continue your AI journey</p>
+            
+            <div class="auth-tabs animate__animated animate__fadeIn animate__delay-1s">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <div class="tab-content" id="login-tab">
+                <form id="login-form" class="auth-form animate__animated animate__fadeIn animate__delay-1s">
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary glow animate__animated animate__pulse animate__infinite">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <div class="auth-divider animate__animated animate__fadeIn animate__delay-2s">
+                    <span>or continue with</span>
+                </div>
+                
+                <div class="social-auth animate__animated animate__fadeIn animate__delay-2s">
+                    <div id="g_id_onload"
+                         data-client_id="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com"
+                         data-context="signin"
+                         data-callback="handleGoogleSignIn"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="outline"
+                         data-text="signin_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="center"
+                         data-width="280">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="register-tab">
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="reg-name"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="reg-name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="reg-email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="reg-password" name="password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-confirm-password"><i class="fas fa-lock"></i> Confirm Password</label>
+                        <input type="password" id="reg-confirm-password" name="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary glow">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>or continue with</span>
+                </div>
+                
+                <div class="social-auth">
+                    <div id="g_id_onload"
+                         data-client_id="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com"
+                         data-context="signup"
+                         data-callback="handleGoogleSignUp"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="outline"
+                         data-text="signup_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="center"
+                         data-width="280">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        particlesJS('particles-js',
+        {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#00ff9d"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00ff9d",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+
+    <script src="js/auth.js"></script>
+    
+    <!-- Add scroll animation script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add parallax effect to floating elements
+        document.addEventListener('mousemove', (e) => {
+            const floating = document.querySelectorAll('.floating-element');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            floating.forEach(element => {
+                const speed = element.getAttribute('data-speed') || 30;
+                const x = (window.innerWidth - (mouseX * speed));
+                const y = (window.innerHeight - (mouseY * speed));
+                element.style.transform = `translate(${-x/50}px, ${-y/50}px)`;
+            });
+        });
+    });
+    </script>
+</body>
+</html>

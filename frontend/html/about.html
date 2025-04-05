@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Cognis AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="neural-bg"></div>
+    <div class="gradient-overlay"></div>
+    
+    <!-- Add floating background elements -->
+    <div class="floating-element floating-circle" style="top: 20%; left: 10%;"></div>
+    <div class="floating-element floating-circle" style="top: 60%; right: 15%;"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Cognis.ai</a>
+            <div class="nav-links animate__animated animate__fadeIn">
+                <a href="characters.html"><i class="fas fa-robot"></i> Characters</a>
+                <a href="create.html"><i class="fas fa-magic"></i> Create</a>
+                <a href="about.html" class="active"><i class="fas fa-info-circle"></i> About</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="about-section" id="about">
+        <h2 class="gradient-text scroll-animate">About Cognis AI</h2>
+        
+        <div class="about-content">
+            <div class="about-image scroll-animate-left">
+                <img src="image1.jpg" alt="Cognis AI Platform" class="glow">
+            </div>
+            
+            <div class="about-text scroll-animate-right">
+                <h3>Our Mission</h3>
+                <p>At Cognis AI, we're revolutionizing the way people interact with artificial intelligence. Our platform enables users to create and customize AI characters tailored to their specific interests, learning goals, and preferences.</p>
+                
+                <h3>What We Offer</h3>
+                <p>Our cutting-edge technology allows you to design AI companions that can assist with learning new subjects, practicing languages, exploring scientific concepts, and much more. Each character is uniquely designed to provide personalized interactions and meaningful conversations.</p>
+                
+                <h3>Our Technology</h3>
+                <p>Powered by advanced machine learning algorithms and natural language processing, Cognis AI characters can understand context, remember previous interactions, and continuously improve their responses based on your feedback.</p>
+                
+                <h3>Join Our Community</h3>
+                <p>Whether you're a student, educator, professional, or simply curious about AI, Cognis AI offers a safe and engaging environment to explore the possibilities of artificial intelligence. Join our growing community of users who are discovering new ways to learn and grow with AI assistance.</p>
+            </div>
+        </div>
+        
+        <div class="about-features scroll-animate">
+            <div class="feature-card glow">
+                <i class="fas fa-brain feature-icon"></i>
+                <h4>Intelligent Learning</h4>
+                <p>Our AI adapts to your learning style and pace, providing a truly personalized experience.</p>
+            </div>
+            
+            <div class="feature-card glow">
+                <i class="fas fa-lock feature-icon"></i>
+                <h4>Privacy First</h4>
+                <p>Your data and conversations are protected with state-of-the-art security measures.</p>
+            </div>
+            
+            <div class="feature-card glow">
+                <i class="fas fa-sync feature-icon"></i>
+                <h4>Continuous Improvement</h4>
+                <p>Our platform is constantly evolving with new features and capabilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="particles-config.js"></script>
+    <!-- Add scroll animation script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with scroll animation classes
+        document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // Add parallax effect to floating elements
+        document.addEventListener('mousemove', (e) => {
+            const floating = document.querySelectorAll('.floating-element');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            floating.forEach(element => {
+                const speed = element.getAttribute('data-speed') || 30;
+                const x = (window.innerWidth - (mouseX * speed));
+                const y = (window.innerHeight - (mouseY * speed));
+                element.style.transform = `translate(${-x/50}px, ${-y/50}px)`;
+            });
+        });
+    });
+    </script>
+</body>
+</html>
