@@ -1,4 +1,4 @@
-// Chat functionality for Cognis AI
+// Chat functionality with backend integration
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is authenticated
     const token = localStorage.getItem('token');
