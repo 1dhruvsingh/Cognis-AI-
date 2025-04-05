@@ -1,0 +1,239 @@
+/* Characters page specific styles */
+.characters {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 120px 20px 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add decorative elements */
+.characters::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: var(--primary-color);
+    filter: blur(150px);
+    opacity: 0.15;
+    top: 5%;
+    right: 5%;
+    animation: floatAround 12s infinite ease-in-out;
+}
+
+.characters::after {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: var(--secondary-color);
+    filter: blur(150px);
+    opacity: 0.15;
+    bottom: 5%;
+    left: 10%;
+    animation: floatAround 10s infinite ease-in-out reverse;
+}
+
+/* Enhanced character grid */
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 2rem;
+}
+
+/* Enhanced character cards */
+.character-card {
+    background: rgba(15, 15, 20, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.character-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 
+                0 0 20px rgba(0, 255, 157, 0.2), 
+                0 0 40px rgba(255, 0, 247, 0.1);
+    border-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Character image container */
+.character-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+    border: 3px solid transparent;
+    background: linear-gradient(145deg, rgba(0, 255, 157, 0.2), rgba(255, 0, 247, 0.2));
+    padding: 3px;
+}
+
+.character-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+}
+
+.character-card:hover .character-image img {
+    transform: scale(1.1);
+}
+
+/* Character overlay with icon */
+.character-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.7), rgba(255, 0, 247, 0.7));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.character-card:hover .character-overlay {
+    opacity: 0.8;
+}
+
+.character-overlay i {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Character card content */
+.character-card h3 {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.character-card p {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+/* Enhanced button styles */
+.character-card .btn {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.character-card .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+    z-index: -1;
+}
+
+.character-card .btn:hover::before {
+    left: 100%;
+}
+
+/* Animation for floating elements */
+@keyframes floatAround {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(10px, -10px); }
+    50% { transform: translate(0, -20px); }
+    75% { transform: translate(-10px, -10px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Floating elements */
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    opacity: 0.1;
+    filter: blur(20px);
+    z-index: 0;
+}
+
+.floating-circle {
+    width: 150px;
+    height: 150px;
+    animation: floatAround 15s infinite ease-in-out;
+}
+
+/* Scroll animations */
+.scroll-animate, .scroll-animate-left, .scroll-animate-right {
+    opacity: 0;
+    transition: all 0.8s ease;
+    transform: translateY(30px);
+}
+
+.scroll-animate-left {
+    transform: translateX(-30px);
+}
+
+.scroll-animate-right {
+    transform: translateX(30px);
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .character-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+    
+    .characters {
+        padding: 100px 15px 40px;
+    }
+    
+    .character-card {
+        padding: 1.2rem;
+    }
+    
+    .character-image {
+        width: 120px;
+        height: 120px;
+    }
+}

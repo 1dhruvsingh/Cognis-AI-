@@ -1,0 +1,478 @@
+/* Create this new file for create.html specific styles */
+.create-character {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 20px 60px;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(255, 0, 247, 0.1));
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* Add decorative elements */
+.create-character::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: var(--primary-color);
+    filter: blur(120px);
+    opacity: 0.15;
+    top: 10%;
+    left: 5%;
+    animation: floatAround 8s infinite ease-in-out;
+}
+
+.create-character::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: var(--secondary-color);
+    filter: blur(120px);
+    opacity: 0.15;
+    bottom: 10%;
+    right: 5%;
+    animation: floatAround 8s infinite ease-in-out reverse;
+}
+
+/* Enhanced form styling with glass effect */
+.create-form {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 650px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                0 0 20px rgba(0, 255, 157, 0.2), 
+                0 0 40px rgba(255, 0, 247, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 
+                0 0 25px rgba(0, 255, 157, 0.3), 
+                0 0 50px rgba(255, 0, 247, 0.15);
+}
+
+/* Add subtle shine effect to form */
+.create-form::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        transparent 60%);
+    transform: rotate(30deg);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Add subtitle styling */
+.subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+/* Enhanced input fields with modern styling */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    z-index: 1;
+    position: relative;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+}
+
+/* Add focus effect for inputs */
+.input-focus-effect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: width 0.3s ease;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.form-input:focus ~ .input-focus-effect {
+    width: 100%;
+}
+
+.textarea-effect {
+    bottom: 4px;
+}
+
+/* Style select dropdown */
+.select-wrapper {
+    position: relative;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Enhanced checkbox styling */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.checkbox-label:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.checkbox-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.custom-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.custom-checkbox i {
+    color: var(--background-color);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked ~ .custom-checkbox {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked ~ .custom-checkbox i {
+    opacity: 1;
+}
+
+/* Enhanced slider styling */
+.personality-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.slider-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.slider-group label {
+    min-width: 100px;
+    text-align: right;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+input[type="range"] {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    accent-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* Enhanced form group styling */
+.form-group {
+    margin-bottom: 1.8rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Update character count */
+.char-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+/* Update select element background */
+select.form-input {
+    background: transparent;
+    cursor: pointer;
+}
+
+select.form-input option {
+    background-color: var(--background-color);
+    color: white;
+}
+
+/* Update textarea */
+textarea.form-input {
+    min-height: 120px;
+    resize: vertical;
+    background: transparent;
+}
+
+/* Form actions container */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Enhanced submit button */
+button[type="submit"] {
+    flex: 3;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: var(--background-color);
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+    z-index: -1;
+}
+
+button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 255, 157, 0.4);
+}
+
+button[type="submit"]:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Reset button styling */
+button[type="reset"] {
+    flex: 1;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button[type="reset"]:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+/* Title styling */
+.create-character h2.gradient-text {
+    margin-bottom: 3rem;
+    text-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+/* Animations */
+@keyframes floatAround {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(10px, -10px);
+    }
+    50% {
+        transform: translate(0, -20px);
+    }
+    75% {
+        transform: translate(-10px, -10px);
+    }
+}
+
+/* Floating elements styling */
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.floating-circle {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle at center, 
+        rgba(0, 255, 157, 0.15) 0%, 
+        rgba(255, 0, 247, 0.1) 50%, 
+        transparent 70%);
+    filter: blur(40px);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 900px) {
+    .create-form {
+        padding: 2rem;
+        max-width: 90%;
+    }
+    
+    .checkbox-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .floating-circle {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .create-form {
+        padding: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .checkbox-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    button[type="reset"],
+    button[type="submit"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-form {
+        padding: 1rem;
+    }
+    
+    .checkbox-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .create-character h2.gradient-text {
+        font-size: 2rem;
+    }
+}
+
+/* ... rest of the create-specific styles ... */
