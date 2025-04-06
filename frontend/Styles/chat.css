@@ -290,6 +290,8 @@
     flex: 1;
     display: flex;
     margin-right: 10px;
+    align-items: center;
+    gap: 15px;
 }
 
 .reset-button {
@@ -314,15 +316,13 @@
     margin-right: 5px;
 }
 
-#chatForm {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
+/* Removed duplicate #chatForm declaration */
 
 .input-wrapper {
     position: relative;
     flex: 1;
+    max-width: calc(100% - 70px);
+    min-width: 0; /* Prevents overflow issues */
 }
 
 .chat-input {
@@ -603,7 +603,11 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .chat-container {
+        padding: 100px 15px 15px;
+    }
+    
     .chat-header h2.gradient-text {
         font-size: 2rem;
     }
@@ -630,6 +634,28 @@
         width: 45px;
         height: 45px;
     }
+    
+    #chatForm {
+        gap: 10px;
+    }
+    
+    .chat-input-container {
+        flex-direction: column;
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    #chatForm {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .reset-button {
+        align-self: flex-end;
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -643,5 +669,25 @@
     
     .message {
         max-width: 95%;
+    }
+    
+    .chat-header h2.gradient-text {
+        font-size: 1.8rem;
+    }
+    
+    .message-avatar {
+        width: 35px;
+        height: 35px;
+        margin: 0 5px;
+    }
+    
+    .send-button {
+        width: 45px;
+        height: 45px;
+        min-width: 45px; /* Prevents button from shrinking */
+    }
+    
+    #chatForm {
+        gap: 8px;
     }
 }

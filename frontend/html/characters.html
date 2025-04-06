@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../Styles/characters.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Add auth.js for authentication check -->
-    <script src="js/auth.js"></script>
+    <script src="../js/auth.js"></script>
 </head>
 <body>
     <div id="particles-js"></div>
@@ -36,7 +36,7 @@
 
     <section class="characters" id="characters">
         <h2 class="gradient-text scroll-animate">Featured Characters</h2>
-        <div class="character-grid">
+        <div class="character-grid" id="featuredCharacters">
             <div class="character-card glow scroll-animate-left">
                 <div class="character-image">
                     <img src="../Images/image3.png" alt="Math Teacher">
@@ -71,9 +71,15 @@
                 <a href="chat.html" class="btn btn-secondary">Try Now</a>
             </div>
         </div>
+        
+        <h2 class="gradient-text scroll-animate" style="margin-top: 3rem;">Your Created Characters</h2>
+        <div class="character-grid" id="userCharacters">
+            <!-- User-created characters will be loaded here dynamically -->
+        </div>
     </section>
 
     <script src="particles-config.js"></script>
+    <script src="../js/subjects.js"></script>
     <!-- Add scroll animation script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -82,7 +88,8 @@
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver((entries) => {
+        // Create a global observer that can be accessed by other functions
+        window.cardObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in');
@@ -92,9 +99,74 @@
 
         // Observe all elements with scroll animation classes
         document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach((element) => {
-            observer.observe(element);
+            window.cardObserver.observe(element);
         });
+        
+        // Load user-created subjects
+        loadUserSubjects();
     });
+    
+    // Function to load and display user-created subjects
+    function loadUserSubjects() {
+        const userCharactersContainer = document.getElementById('userCharacters');
+        const subjects = getAllSubjects();
+        
+        console.log('Loading user subjects:', subjects); // Debug log to check if subjects are loaded
+        
+        // Clear any existing content
+        userCharactersContainer.innerHTML = '';
+        
+        if (subjects.length === 0) {
+            // Display message if no subjects exist
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'empty-characters';
+            emptyMessage.innerHTML = `
+                <p>You haven't created any characters yet.</p>
+                <a href="create.html" class="btn btn-primary">
+                    <i class="fas fa-magic"></i> Create Your First Character
+                </a>
+            `;
+            userCharactersContainer.appendChild(emptyMessage);
+            return;
+        }
+        
+        // Create a card for each subject
+        subjects.forEach((subject, index) => {
+            // Create animation class based on position
+            let animationClass = 'scroll-animate';
+            if (index % 3 === 0) animationClass = 'scroll-animate-left';
+            if (index % 3 === 2) animationClass = 'scroll-animate-right';
+            
+            // Determine icon based on subject type or expertise
+            let iconClass = getSubjectIcon(subject.type);
+            if (subject.expertise && subject.expertise.length > 0) {
+                // Use first expertise area for icon if available
+                iconClass = getSubjectIcon(subject.expertise[0]) || iconClass;
+            }
+            
+            // Create card element
+            const card = document.createElement('div');
+            card.className = `character-card glow ${animationClass}`;
+            card.innerHTML = `
+                <div class="character-image">
+                    <img src="${subject.image || '../Images/image3.png'}" alt="${subject.name}">
+                    <div class="character-overlay">
+                        <i class="${iconClass}"></i>
+                    </div>
+                </div>
+                <h3>${subject.name}</h3>
+                <p>${subject.description.substring(0, 100)}${subject.description.length > 100 ? '...' : ''}</p>
+                <a href="chat.html?subject=${subject.id}" class="btn btn-secondary">Chat Now</a>
+            `;
+            
+            userCharactersContainer.appendChild(card);
+            
+            // Add to observer for animation - use the global observer from DOMContentLoaded
+            if (window.cardObserver) {
+                window.cardObserver.observe(card);
+            }
+        });
+    }
     </script>
 </body>
 </html>

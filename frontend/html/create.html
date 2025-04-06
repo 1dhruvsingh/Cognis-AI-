@@ -117,6 +117,7 @@
     </section>
 
     <script src="particles-config.js"></script>
+    <script src="../js/subjects.js"></script>
     <script>
         // Character count for description
         const description = document.getElementById('aiDescription');
@@ -141,7 +142,9 @@
                     professional: formData.get('professional'),
                     creative: formData.get('creative')
                 },
-                description: formData.get('aiDescription')
+                description: formData.get('aiDescription'),
+                // Add a default image based on type
+                image: '../Images/image' + (Math.floor(Math.random() * 3) + 2) + '.png'
             };
 
             // Show loading state
@@ -150,10 +153,12 @@
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
             submitButton.disabled = true;
 
+            // Save the subject to localStorage
+            const savedSubject = saveSubject(data);
+            console.log('AI Character Created:', savedSubject);
+            
             // Simulate API call (replace with actual API call)
             setTimeout(() => {
-                console.log('AI Character Created:', data);
-                
                 // Show success message
                 alert('AI Character created successfully!');
                 
@@ -165,9 +170,9 @@
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
                 
-                // Redirect to chat page
-                window.location.href = 'chat.html';
-            }, 2000);
+                // Redirect to characters page to see the new character
+                window.location.href = 'characters.html';
+            }, 1500);
         }
     </script>
 </body>

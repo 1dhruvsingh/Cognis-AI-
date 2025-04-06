@@ -1,5 +1,42 @@
 // Authentication handling for Cognis AI
 document.addEventListener('DOMContentLoaded', function() {
+    // Form validation functions
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function validatePassword(password) {
+        return password.length >= 6; // Minimum 6 characters
+    }
+    
+    function showInputError(inputElement, message) {
+        // Remove any existing error message
+        const existingError = inputElement.parentElement.querySelector('.input-error');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        // Add error class to input
+        inputElement.classList.add('input-error');
+        
+        // Create and append error message
+        const errorElement = document.createElement('div');
+        errorElement.className = 'input-error';
+        errorElement.textContent = message;
+        inputElement.parentElement.appendChild(errorElement);
+    }
+    
+    function clearInputError(inputElement) {
+        // Remove error class
+        inputElement.classList.remove('input-error');
+        
+        // Remove error message
+        const errorElement = inputElement.parentElement.querySelector('.input-error');
+        if (errorElement) {
+            errorElement.remove();
+        }
+    }
     // Tab switching functionality
     const tabs = document.querySelectorAll('.auth-tab');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -27,11 +64,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     
     if (loginForm) {
+        // Get form input elements
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        
+        // Remove real-time validation to prevent input fields from closing prematurely
+        // Validation will only happen when the form is submitted
+        
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            
+            // Validate form before submission
+            let isValid = true;
+            
+            // Validate email
+            if (!email.trim()) {
+                showInputError(emailInput, 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showInputError(emailInput, 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearInputError(emailInput);
+            }
+            
+            // Validate password
+            if (!password.trim()) {
+                showInputError(passwordInput, 'Password is required');
+                isValid = false;
+            } else if (!validatePassword(password)) {
+                showInputError(passwordInput, 'Password must be at least 6 characters');
+                isValid = false;
+            } else {
+                clearInputError(passwordInput);
+            }
+            
+            // If validation fails, stop form submission
+            if (!isValid) {
+                return;
+            }
             
             try {
                 // Check if server is available
@@ -108,17 +182,72 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (registerForm) {
+        // Get form input elements
+        const nameInput = document.getElementById('reg-name');
+        const emailInput = document.getElementById('reg-email');
+        const passwordInput = document.getElementById('reg-password');
+        const confirmPasswordInput = document.getElementById('reg-confirm-password');
+        
+        // Remove real-time validation to prevent input fields from closing prematurely
+        // Validation will only happen when the form is submitted
+        
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const name = nameInput.value;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
             
-            // Password validation
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
+            // Validate form before submission
+            let isValid = true;
+            
+            // Validate name
+            if (!name.trim()) {
+                showInputError(nameInput, 'Name is required');
+                isValid = false;
+            } else if (name.trim().length < 2) {
+                showInputError(nameInput, 'Name must be at least 2 characters');
+                isValid = false;
+            } else {
+                clearInputError(nameInput);
+            }
+            
+            // Validate email
+            if (!email.trim()) {
+                showInputError(emailInput, 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showInputError(emailInput, 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearInputError(emailInput);
+            }
+            
+            // Validate password
+            if (!password.trim()) {
+                showInputError(passwordInput, 'Password is required');
+                isValid = false;
+            } else if (!validatePassword(password)) {
+                showInputError(passwordInput, 'Password must be at least 6 characters');
+                isValid = false;
+            } else {
+                clearInputError(passwordInput);
+            }
+            
+            // Validate confirm password
+            if (!confirmPassword.trim()) {
+                showInputError(confirmPasswordInput, 'Please confirm your password');
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                showInputError(confirmPasswordInput, 'Passwords do not match');
+                isValid = false;
+            } else {
+                clearInputError(confirmPasswordInput);
+            }
+            
+            // If validation fails, stop form submission
+            if (!isValid) {
                 return;
             }
             

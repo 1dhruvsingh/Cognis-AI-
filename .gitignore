@@ -6,7 +6,7 @@
 .env.test.local
 .env.production
 .env.production.local
-.env.exaple
+.env.example
 # Build output
 dist
 build

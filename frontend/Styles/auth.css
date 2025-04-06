@@ -103,6 +103,24 @@
     box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
 }
 
+/* Form validation styles */
+.form-group input.input-error {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 0 2px rgba(255, 77, 77, 0.2);
+}
+
+.input-error {
+    color: #ff4d4d;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .forgot-password {
     display: block;
     text-align: right;
