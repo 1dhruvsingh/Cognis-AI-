@@ -8,7 +8,7 @@ const Chat = require('../models/Chat');
 const Subject = require('../models/Subject');
 
 // Initialize Google Generative AI with API key
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Get Gemini Pro model
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -44,26 +44,9 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: 'Either chatId or subjectId is required' });
         }
         
-        // Get chat history from database for Gemini API
-        const chatHistory = chat.messages.map(msg => ({
-            role: msg.sender === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.text }]
-        }));
-
-        // Create a chat session with Gemini
-        const geminiChat = model.startChat({
-            history: chatHistory,
-            generationConfig: {
-                temperature: 0.7,
-                topK: 40,
-                topP: 0.95,
-                maxOutputTokens: 1024,
-            },
-        });
-
         // Send message to Gemini API
-        const result = await geminiChat.sendMessage(message);
-        const response = result.response;
+        const result = await model.generateContent(message);
+        const response = await result.response;
         const aiReply = response.text();
 
         // Add messages to the chat in database

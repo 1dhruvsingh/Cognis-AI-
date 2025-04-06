@@ -167,6 +167,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Function to send message to AI
+    async function sendMessage(event) {
+        event.preventDefault();
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Add user message to UI
+        addMessageToUI('user', message);
+        userInput.value = '';
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    message,
+                    chatId: window.currentChatId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to get AI response');
+            }
+
+            const data = await response.json();
+            addMessageToUI('bot', data.message);
+            
+            // Update current chat ID if it's a new chat
+            if (data.chatId && !window.currentChatId) {
+                window.currentChatId = data.chatId;
+                localStorage.setItem('currentChatId', data.chatId);
+                // Refresh chat history
+                loadChatHistory();
+            }
+
+            // Save to chat history
+            chatHistory.push({ sender: 'user', text: message });
+            chatHistory.push({ sender: 'bot', text: data.message });
+            saveHistory();
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+            addMessageToUI('bot', 'Sorry, I encountered an error. Please try again.');
+        }
+    }
+
     // Function to display stored chat history from localStorage
     function displayStoredChatHistory() {
         // Get stored chats from localStorage

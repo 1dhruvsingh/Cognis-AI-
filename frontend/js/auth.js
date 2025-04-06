@@ -126,6 +126,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     const data = await response.json();
                     
                     if (response.ok) {
+                        // Clear any existing user data
+                        localStorage.removeItem('subjects');
+                        localStorage.removeItem('chatHistory');
+                        localStorage.removeItem('storedChatHistory');
+                        localStorage.removeItem('currentChatId');
+                        
                         // Store JWT token in localStorage
                         localStorage.setItem('token', data.token);
                         localStorage.setItem('user', JSON.stringify(data.user));
@@ -403,8 +409,13 @@ function isAuthenticated() {
 
 // Logout function
 function logout() {
+    // Clear all user-related data from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('subjects');
+    localStorage.removeItem('chatHistory');
+    localStorage.removeItem('storedChatHistory');
+    localStorage.removeItem('currentChatId');
     window.location.href = 'login.html';
 }
 
