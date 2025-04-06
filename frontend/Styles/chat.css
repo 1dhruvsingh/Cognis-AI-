@@ -550,6 +550,20 @@
     border-color: rgba(0, 255, 157, 0.3);
 }
 
+.chat-history-item.stored-chat {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--secondary-color);
+}
+
+.chat-history-item.stored-chat:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.chat-history-item.stored-chat.active {
+    background: rgba(255, 0, 247, 0.1);
+    border-color: rgba(255, 0, 247, 0.3);
+}
+
 .chat-history-item .title {
     font-weight: bold;
     margin-bottom: 5px;

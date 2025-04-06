@@ -38,10 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Import API base URL from config
+    const API_BASE_URL = 'http://localhost:3000';
+    
     // Load chat history from server
     async function loadChatHistory() {
         try {
-            const response = await fetch('/api/chat/history', {
+            const response = await fetch(`${API_BASE_URL}/api/chat/history`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -52,9 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayChatHistory(data.chats);
             } else {
                 console.error('Failed to load chat history');
+                // If server request fails, display locally stored chats
+                displayStoredChatHistory();
             }
         } catch (error) {
             console.error('Error loading chat history:', error);
+            // If server request fails, display locally stored chats
+            displayStoredChatHistory();
         }
     }
     
@@ -97,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load a specific chat
     async function loadChat(chatId) {
         try {
-            const response = await fetch(`/api/chat/${chatId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/chat/${chatId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -160,8 +167,92 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Function to display stored chat history from localStorage
+    function displayStoredChatHistory() {
+        // Get stored chats from localStorage
+        const storedChats = JSON.parse(localStorage.getItem('storedChatHistory') || '[]');
+        
+        // If there are no stored chats and no server chats, show empty message
+        if (storedChats.length === 0 && chatHistoryList.children.length === 0) {
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'empty-history';
+            emptyMessage.textContent = 'No chat history yet';
+            chatHistoryList.appendChild(emptyMessage);
+            return;
+        }
+        
+        // Add stored chats to the history list
+        storedChats.forEach(chat => {
+            // Check if this chat is already in the list
+            const existingItems = Array.from(chatHistoryList.children);
+            const exists = existingItems.some(item => 
+                item.classList.contains('chat-history-item') && 
+                item.dataset.chatId === chat.id
+            );
+            
+            if (!exists) {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-history-item stored-chat';
+                chatItem.dataset.chatId = chat.id;
+                
+                const title = document.createElement('div');
+                title.className = 'title';
+                title.textContent = chat.title;
+                
+                const date = document.createElement('div');
+                date.className = 'date';
+                date.textContent = chat.date;
+                
+                chatItem.appendChild(title);
+                chatItem.appendChild(date);
+                
+                // Add click event to load this stored chat
+                chatItem.addEventListener('click', () => loadStoredChat(chat));
+                
+                chatHistoryList.appendChild(chatItem);
+            }
+        });
+    }
+    
+    // Function to load a stored chat
+    function loadStoredChat(chat) {
+        // Clear current chat display
+        chatMessages.innerHTML = '';
+        chatHistory = [];
+        
+        // Display messages from stored chat
+        chat.messages.forEach(msg => {
+            addMessageToUI(msg.sender, msg.text);
+            chatHistory.push({ sender: msg.sender, text: msg.text });
+        });
+        
+        // If no messages, add welcome message
+        if (chat.messages.length === 0) {
+            addMessageToUI('bot', 'Hello! I\'m your AI study assistant. How can I help you today?');
+        }
+        
+        // Update active state in sidebar
+        document.querySelectorAll('.chat-history-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Find and activate this chat item
+        const chatItems = document.querySelectorAll('.chat-history-item');
+        chatItems.forEach(item => {
+            if (item.dataset.chatId === chat.id) {
+                item.classList.add('active');
+            }
+        });
+        
+        // Save to localStorage
+        saveHistory();
+    }
+    
     // Load chat history when page loads
     loadChatHistory();
+    
+    // Also display stored chat history
+    displayStoredChatHistory();
 
     // Send message function
     window.sendMessage = async function(event) {
@@ -173,19 +264,24 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear input
         userInput.value = '';
         
-        // Add user message to UI
+        // Add user message to UI - ensure it's displayed immediately
         addMessageToUI('user', userMessage);
         
         // Add to chat history
         chatHistory.push({ sender: 'user', text: userMessage });
         saveHistory();
         
+        // Make sure the UI updates before sending to server
+        setTimeout(() => {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 10);
+        
         // Show typing indicator
         showTypingIndicator();
         
         try {
             // Send message to backend
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -248,7 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
         contentDiv.className = 'message-content';
         
         const paragraph = document.createElement('p');
-        paragraph.textContent = text;
+        // Make sure text is properly displayed as a string
+        paragraph.textContent = String(text);
         contentDiv.appendChild(paragraph);
         
         messageDiv.appendChild(avatarDiv);
@@ -310,6 +407,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear chat history (all chats)
     window.clearChatHistory = function() {
+        // Store the current chat history before clearing if it's not empty
+        if (chatHistory.length > 0) {
+            // Create a timestamp for this chat history
+            const timestamp = new Date().toISOString();
+            const chatTitle = `Chat ${new Date().toLocaleString()}`;
+            
+            // Get existing stored chats
+            const storedChats = JSON.parse(localStorage.getItem('storedChatHistory') || '[]');
+            
+            // Add current chat to stored chats
+            storedChats.push({
+                id: timestamp,
+                title: chatTitle,
+                messages: chatHistory,
+                date: new Date().toLocaleString()
+            });
+            
+            // Keep only the last 10 chats to avoid localStorage limits
+            const trimmedStoredChats = storedChats.slice(-10);
+            
+            // Save to localStorage
+            localStorage.setItem('storedChatHistory', JSON.stringify(trimmedStoredChats));
+        }
+        
         chatHistory = [];
         localStorage.removeItem('chatHistory');
         chatMessages.innerHTML = '';
@@ -317,9 +438,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add welcome message
         addMessageToUI('bot', 'Hello! I\'m your AI study assistant. How can I help you today?');
         
+        // Update the chat history sidebar
+        displayStoredChatHistory();
+        
         // Also clear from server if authenticated
         if (token) {
-            fetch('/api/chat/history', {
+            fetch(`${API_BASE_URL}/api/chat/history`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -339,7 +463,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!chatId || !token) return;
         
         try {
-            const response = await fetch(`/api/chat/${chatId}`, {
+            // Store the current chat history before resetting
+            if (chatHistory.length > 0) {
+                // Create a timestamp for this chat history
+                const timestamp = new Date().toISOString();
+                const chatTitle = `Chat ${new Date().toLocaleString()}`;
+                
+                // Get existing stored chats
+                const storedChats = JSON.parse(localStorage.getItem('storedChatHistory') || '[]');
+                
+                // Add current chat to stored chats
+                storedChats.push({
+                    id: timestamp,
+                    title: chatTitle,
+                    messages: chatHistory,
+                    date: new Date().toLocaleString()
+                });
+                
+                // Keep only the last 10 chats to avoid localStorage limits
+                const trimmedStoredChats = storedChats.slice(-10);
+                
+                // Save to localStorage
+                localStorage.setItem('storedChatHistory', JSON.stringify(trimmedStoredChats));
+                
+                // Update the chat history sidebar
+                displayStoredChatHistory();
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/chat/${chatId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

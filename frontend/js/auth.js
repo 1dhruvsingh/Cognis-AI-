@@ -38,8 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const serverAvailable = false; // Set to false for local development without server
                 
                 if (serverAvailable) {
+                    // Import API base URL from config
+                    const API_BASE_URL = 'http://localhost:3000';
                     // Server-side authentication (original code)
-                    const response = await fetch('/api/auth/login', {
+                    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -125,8 +127,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const serverAvailable = false; // Set to false for local development without server
                 
                 if (serverAvailable) {
+                    // Import API base URL from config
+                    const API_BASE_URL = 'http://localhost:3000';
                     // Server-side registration (original code)
-                    const response = await fetch('/api/auth/register', {
+                    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
