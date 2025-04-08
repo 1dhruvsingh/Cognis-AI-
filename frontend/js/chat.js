@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Display chat history in sidebar
+    // Update the displayChatHistory function to include delete buttons
     function displayChatHistory(chats) {
         chatHistoryList.innerHTML = '';
         
@@ -84,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 chatItem.classList.add('active');
             }
             
+            const chatContent = document.createElement('div');
+            chatContent.className = 'chat-content';
+            
             const title = document.createElement('div');
             title.className = 'title';
             title.textContent = chat.title;
@@ -92,8 +96,17 @@ document.addEventListener('DOMContentLoaded', function() {
             date.className = 'date';
             date.textContent = new Date(chat.updatedAt).toLocaleString();
             
-            chatItem.appendChild(title);
-            chatItem.appendChild(date);
+            chatContent.appendChild(title);
+            chatContent.appendChild(date);
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-chat-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.title = 'Delete chat';
+            deleteBtn.onclick = (e) => deleteChat(chat._id, e);
+            
+            chatItem.appendChild(chatContent);
+            chatItem.appendChild(deleteBtn);
             
             chatItem.addEventListener('click', () => loadChat(chat._id));
             
@@ -590,3 +603,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 });
+
+// Function to delete a specific chat
+window.deleteChat = async function(chatId, event) {
+    // Prevent the click from propagating to the chat item
+    if (event) {
+        event.stopPropagation();
+    }
+    
+    // Confirm deletion
+    if (!confirm('Are you sure you want to delete this chat?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/chat/${chatId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            // If the deleted chat was the current chat, clear the UI
+            if (chatId === window.currentChatId) {
+                // Clear current chat display
+                chatMessages.innerHTML = '';
+                chatHistory = [];
+                window.currentChatId = null;
+                localStorage.removeItem('currentChatId');
+                
+                // Add welcome message
+                addMessageToUI('bot', 'Chat has been deleted. How can I help you today?');
+            }
+            
+            // Refresh chat history to update the sidebar
+            loadChatHistory();
+        } else {
+            console.error('Failed to delete chat');
+            alert('Failed to delete chat. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        alert('Error deleting chat. Please try again.');
+    }
+};

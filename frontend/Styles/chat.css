@@ -678,6 +678,37 @@
     cursor: pointer;
     transition: all 0.2s ease;
     border: 1px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.delete-chat-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.delete-chat-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff5555;
+    opacity: 1;
 }
 
 .chat-history-item:hover {

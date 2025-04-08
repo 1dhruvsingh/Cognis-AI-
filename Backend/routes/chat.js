@@ -169,8 +169,35 @@ router.delete('/history', async (req, res) => {
     }
 });
 
-// DELETE /api/chat/:chatId - Reset a specific chat
+// DELETE /api/chat/:chatId - Delete a specific chat
 router.delete('/:chatId', async (req, res) => {
+    try {
+        const userInfo = await getUserInfo(req);
+        const userId = userInfo.id;
+        const { chatId } = req.params;
+        
+        // Find and delete the chat
+        const result = await Chat.findOneAndDelete({ 
+            _id: chatId, 
+            userId: userId 
+        });
+        
+        if (!result) {
+            return res.status(404).json({ message: 'Chat not found' });
+        }
+        
+        res.json({ 
+            message: 'Chat deleted successfully',
+            chatId: chatId
+        });
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+        res.status(500).json({ message: 'Error deleting chat' });
+    }
+});
+
+// POST /api/chat/:chatId/reset - Reset a specific chat (keep the chat but clear messages)
+router.post('/:chatId/reset', async (req, res) => {
     try {
         const userInfo = await getUserInfo(req);
         const userId = userInfo.id;
@@ -199,6 +226,5 @@ router.delete('/:chatId', async (req, res) => {
         res.status(500).json({ message: 'Error resetting chat' });
     }
 });
-
 
 module.exports = router;
