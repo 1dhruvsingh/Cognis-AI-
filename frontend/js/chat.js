@@ -173,8 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const message = userInput.value.trim();
         if (!message) return;
 
-        // Add user message to UI
-        addMessageToUI('user', message);
+        // Get user info from localStorage
+        const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        const userName = userInfo.name || 'user';
+        
+        // Add user message to UI with actual name
+        addMessageToUI(userName, message);
         userInput.value = '';
 
         try {
@@ -205,8 +209,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadChatHistory();
             }
 
-            // Save to chat history
-            chatHistory.push({ sender: 'user', text: message });
+            // Save to chat history with user's name
+            const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+            const userName = userInfo.name || 'user';
+            chatHistory.push({ sender: userName, text: message });
             chatHistory.push({ sender: 'bot', text: data.message });
             saveHistory();
 
@@ -313,11 +319,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear input
         userInput.value = '';
         
+        // Get user info from localStorage
+        const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        const userName = userInfo.name || 'user';
+        
         // Add user message to UI - ensure it's displayed immediately
-        addMessageToUI('user', userMessage);
+        addMessageToUI(userName, userMessage);
         
         // Add to chat history
-        chatHistory.push({ sender: 'user', text: userMessage });
+        chatHistory.push({ sender: userName, text: userMessage });
         saveHistory();
         
         // Make sure the UI updates before sending to server
@@ -379,18 +389,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add message to UI
     function addMessageToUI(sender, text) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}-message`;
+        // Check if sender is 'bot' or a user name
+        const isBot = sender === 'bot';
+        messageDiv.className = `message ${isBot ? 'bot' : 'user'}-message`;
         
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'message-avatar';
         
         // Add appropriate icon
         const icon = document.createElement('i');
-        icon.className = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
+        icon.className = isBot ? 'fas fa-robot' : 'fas fa-user';
         avatarDiv.appendChild(icon);
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
+        
+        // Add sender name for user messages (if not the generic 'user')
+        if (!isBot && sender !== 'user') {
+            const senderName = document.createElement('div');
+            senderName.className = 'sender-name';
+            senderName.textContent = sender;
+            contentDiv.appendChild(senderName);
+        }
         
         const paragraph = document.createElement('p');
         // Make sure text is properly displayed as a string

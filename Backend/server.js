@@ -243,8 +243,11 @@ function authenticateToken(req, res, next) {
 const chatRoutes = require('./routes/chat');
 const subjectRoutes = require('./routes/subjects');
 
+// Import custom chat authentication middleware
+const chatAuth = require('./middleware/chatAuth');
+
 // Use routes
-app.use('/api/chat', authenticateToken, chatRoutes);
+app.use('/api/chat', chatAuth, chatRoutes); // Use chatAuth instead of authenticateToken for chat routes
 app.use('/api/subjects', authenticateToken, subjectRoutes);
 
 // Start server

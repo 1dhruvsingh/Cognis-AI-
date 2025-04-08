@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 const MessageSchema = new Schema({
     sender: {
         type: String,
-        enum: ['user', 'bot'],
         required: true
+        // Removed enum restriction to allow user names instead of just 'user'
     },
     text: {
         type: String,
