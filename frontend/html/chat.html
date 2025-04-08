@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="../Styles/style.css">
     <link rel="stylesheet" href="../Styles/chat.css">
+    <link rel="stylesheet" href="../Styles/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Add auth.js for authentication check -->
     <script src="../js/auth.js"></script>
@@ -21,6 +22,7 @@
     <div class="floating-element floating-circle" style="top: 15%; left: 10%;" data-speed="20"></div>
     <div class="floating-element floating-circle" style="top: 65%; right: 12%;" data-speed="30"></div>
     <div class="floating-element floating-circle" style="top: 40%; left: 80%;" data-speed="25"></div>
+    <div class="floating-element floating-circle" style="top: 75%; left: 25%;" data-speed="15"></div>
 
     <header>
         <nav>
@@ -42,68 +44,115 @@
         </div>
         
         <div class="chat-layout">
-            <div class="chat-sidebar" id="chatSidebar">
+            <div class="chat-sidebar scroll-animate-left" id="chatSidebar">
                 <div class="sidebar-header">
-                    <h3>Chat History</h3>
-                    <button id="newChatBtn" class="new-chat-btn">
+                    <h3><i class="fas fa-history"></i> Chat History</h3>
+                    <button id="newChatBtn" class="new-chat-btn pulse-animation">
                         <i class="fas fa-plus"></i> New Chat
                     </button>
                 </div>
                 <div class="chat-history" id="chatHistoryList">
                     <!-- Chat history items will be added here -->
                 </div>
-            </div>
-            
-            <div class="chat-interface">
-            <div class="chat-messages" id="chatMessages">
-                <!-- Messages will be added here dynamically -->
-                <div class="message bot-message animate__animated animate__fadeInUp">
-                    <div class="message-avatar">
-                        <i class="fas fa-robot"></i>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-name" id="userName">User</div>
                     </div>
-                    <div class="message-content">
-                        <p>Hello! I'm your AI study assistant. How can I help you today?</p>
-                    </div>
-                </div>
-                <!-- Typing indicator -->
-                <div class="typing-indicator bot-message" style="display: none;">
-                    <div class="message-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="message-content">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="chat-input-container">
-                <form id="chatForm" onsubmit="sendMessage(event)">
-                    <div class="input-wrapper">
-                        <input 
-                            type="text" 
-                            id="userInput" 
-                            class="chat-input" 
-                            placeholder="Type your message here..."
-                            required
-                        >
-                        <div class="input-focus-effect"></div>
-                    </div>
-                    <button type="submit" class="send-button">
-                        <i class="fas fa-paper-plane"></i>
+                    <button onclick="logout()" class="logout-button" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
                     </button>
-                </form>
-                <button onclick="resetCurrentChat(window.currentChatId)" class="reset-button" title="Reset Chat">
-                    <i class="fas fa-redo-alt"></i> Reset Chat
-                </button>
+                </div>
             </div>
-        </div>
+            
+            <div class="chat-interface scroll-animate-right">
+                <div class="chat-header-bar">
+                    <div class="chat-title" id="chatTitle">New Conversation</div>
+                    <div class="chat-actions">
+                        <button onclick="resetCurrentChat(window.currentChatId)" class="action-button" title="Reset Chat">
+                            <i class="fas fa-redo-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be added here dynamically -->
+                    <div class="message bot-message animate__animated animate__fadeInUp">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI study assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+                    <!-- Typing indicator -->
+                    <div class="typing-indicator bot-message" style="display: none;">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <form id="chatForm" onsubmit="sendMessage(event)">
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="userInput" 
+                                class="chat-input" 
+                                placeholder="Type your message here..."
+                                required
+                            >
+                            <div class="input-focus-effect"></div>
+                        </div>
+                        <button type="submit" class="send-button pulse-animation">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
     <script src="../js/particles-config.js"></script>
     <script src="../js/chat.js"></script>
+    
+    <script>
+        // Set user name from localStorage if available
+        document.addEventListener('DOMContentLoaded', function() {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+            const userName = document.getElementById('userName');
+            if (userInfo.name) {
+                userName.textContent = userInfo.name;
+            }
+            
+            // Update chat title when chat is loaded
+            const chatTitle = document.getElementById('chatTitle');
+            const updateChatTitle = function() {
+                const activeChat = document.querySelector('.chat-history-item.active');
+                if (activeChat) {
+                    const title = activeChat.querySelector('.title').textContent;
+                    chatTitle.textContent = title;
+                } else {
+                    chatTitle.textContent = 'New Conversation';
+                }
+            };
+            
+            // Create a MutationObserver to watch for changes in the chat history list
+            const observer = new MutationObserver(updateChatTitle);
+            const chatHistoryList = document.getElementById('chatHistoryList');
+            observer.observe(chatHistoryList, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+            
+            // Initial update
+            updateChatTitle();
+        });
+    </script>
     
     <!-- Add scroll animation script -->
     <script>

@@ -8,14 +8,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="../Styles/style.css">
     <link rel="stylesheet" href="../Styles/create.css">
+    <link rel="stylesheet" href="../Styles/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Add auth.js for authentication check -->
-    <script src="js/auth.js"></script>
+    <script src="../js/auth.js"></script>
 </head>
 <body>
     <div id="particles-js"></div>
     <div class="neural-bg"></div>
     <div class="gradient-overlay"></div>
+    
+    <!-- Enhanced floating background elements -->
+    <div class="floating-element floating-circle" style="top: 15%; left: 10%;" data-speed="20"></div>
+    <div class="floating-element floating-circle" style="top: 65%; right: 12%;" data-speed="30"></div>
+    <div class="floating-element floating-circle" style="top: 40%; left: 80%;" data-speed="25"></div>
+    <div class="floating-element floating-circle" style="top: 75%; left: 25%;" data-speed="15"></div>
 
     <header>
         <nav>
@@ -30,9 +37,50 @@
     </header>
 
     <section class="create-character" id="create">
-        <h2 class="gradient-text animate__animated animate__fadeInDown">Create Your Own AI Character</h2>
-        <div class="create-form glow animate__animated animate__fadeInUp">
-            <form id="aiCreateForm" onsubmit="handleSubmit(event)">
+        <div class="create-header animate__animated animate__fadeInDown">
+            <h2 class="gradient-text">Create Your AI Companion</h2>
+            <p class="subtitle">Design a unique AI character tailored to your preferences and learning needs</p>
+        </div>
+        
+        <div class="create-container">
+            <div class="create-preview">
+                <div class="preview-card">
+                    <div class="preview-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="preview-info">
+                        <h3 id="previewName">Your AI Assistant</h3>
+                        <p id="previewType">Personality Type: <span>Educational Mentor</span></p>
+                        <div class="preview-expertise" id="previewExpertise">
+                            <span class="expertise-tag"><i class="fas fa-calculator"></i> Mathematics</span>
+                        </div>
+                        <div class="preview-personality">
+                            <div class="personality-meter">
+                                <span>Friendly</span>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="friendlyMeter" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div class="personality-meter">
+                                <span>Professional</span>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="professionalMeter" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div class="personality-meter">
+                                <span>Creative</span>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="creativeMeter" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="preview-description" id="previewDescription">Your AI assistant will help you learn and grow. Customize its personality and expertise to match your needs.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="create-form glow">
+                <form id="aiCreateForm" onsubmit="handleSubmit(event)">
                 <div class="form-group">
                     <label for="aiName"><i class="fas fa-robot"></i> AI Name</label>
                     <input 
@@ -82,15 +130,18 @@
                     <div class="personality-sliders">
                         <div class="slider-group">
                             <label>Friendly</label>
-                            <input type="range" name="friendly" min="1" max="10" value="5">
+                            <input type="range" name="friendly" id="friendlySlider" min="1" max="10" value="5">
+                            <div class="slider-value">5</div>
                         </div>
                         <div class="slider-group">
                             <label>Professional</label>
-                            <input type="range" name="professional" min="1" max="10" value="5">
+                            <input type="range" name="professional" id="professionalSlider" min="1" max="10" value="5">
+                            <div class="slider-value">5</div>
                         </div>
                         <div class="slider-group">
                             <label>Creative</label>
-                            <input type="range" name="creative" min="1" max="10" value="5">
+                            <input type="range" name="creative" id="creativeSlider" min="1" max="10" value="5">
+                            <div class="slider-value">5</div>
                         </div>
                     </div>
                 </div>
@@ -116,7 +167,7 @@
         </div>
     </section>
 
-    <script src="particles-config.js"></script>
+    <script src="../js/particles-config.js"></script>
     <script src="../js/subjects.js"></script>
     <script>
         // Character count for description
@@ -125,6 +176,87 @@
         
         description.addEventListener('input', function() {
             charCount.textContent = `${this.value.length}/500`;
+            updatePreview();
+        });
+
+        // Live preview updates
+        const nameInput = document.getElementById('aiName');
+        const typeSelect = document.getElementById('aiType');
+        const expertiseCheckboxes = document.querySelectorAll('input[name="expertise"]');
+        const friendlySlider = document.getElementById('friendlySlider');
+        const professionalSlider = document.getElementById('professionalSlider');
+        const creativeSlider = document.getElementById('creativeSlider');
+        
+        // Preview elements
+        const previewName = document.getElementById('previewName');
+        const previewType = document.getElementById('previewType');
+        const previewExpertise = document.getElementById('previewExpertise');
+        const previewDescription = document.getElementById('previewDescription');
+        const friendlyMeter = document.getElementById('friendlyMeter');
+        const professionalMeter = document.getElementById('professionalMeter');
+        const creativeMeter = document.getElementById('creativeMeter');
+        
+        // Update slider values
+        const sliderValues = document.querySelectorAll('.slider-value');
+        document.querySelectorAll('.slider-group input').forEach((slider, index) => {
+            slider.addEventListener('input', function() {
+                sliderValues[index].textContent = this.value;
+                updatePreview();
+            });
+        });
+        
+        // Update preview function
+        function updatePreview() {
+            // Update name
+            previewName.textContent = nameInput.value || 'Your AI Assistant';
+            
+            // Update type
+            const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
+            previewType.innerHTML = `Personality Type: <span>${selectedType !== 'Select AI Personality Type' ? selectedType : 'Educational Mentor'}</span>`;
+            
+            // Update expertise
+            previewExpertise.innerHTML = '';
+            let hasExpertise = false;
+            
+            expertiseCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    hasExpertise = true;
+                    const icon = checkbox.value === 'math' ? 'calculator' : 
+                                checkbox.value === 'science' ? 'flask' : 
+                                checkbox.value === 'languages' ? 'language' : 'palette';
+                    
+                    const tag = document.createElement('span');
+                    tag.className = 'expertise-tag';
+                    tag.innerHTML = `<i class="fas fa-${icon}"></i> ${checkbox.parentNode.textContent.trim()}`;
+                    previewExpertise.appendChild(tag);
+                }
+            });
+            
+            if (!hasExpertise) {
+                const tag = document.createElement('span');
+                tag.className = 'expertise-tag';
+                tag.innerHTML = '<i class="fas fa-calculator"></i> Mathematics';
+                previewExpertise.appendChild(tag);
+            }
+            
+            // Update personality meters
+            friendlyMeter.style.width = `${friendlySlider.value * 10}%`;
+            professionalMeter.style.width = `${professionalSlider.value * 10}%`;
+            creativeMeter.style.width = `${creativeSlider.value * 10}%`;
+            
+            // Update description
+            if (description.value) {
+                previewDescription.textContent = description.value;
+            } else {
+                previewDescription.textContent = 'Your AI assistant will help you learn and grow. Customize its personality and expertise to match your needs.';
+            }
+        }
+        
+        // Add event listeners for all form elements
+        nameInput.addEventListener('input', updatePreview);
+        typeSelect.addEventListener('change', updatePreview);
+        expertiseCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updatePreview);
         });
 
         // Form submission handler
@@ -170,10 +302,30 @@
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
                 
+                // Reset preview
+                updatePreview();
+                
                 // Redirect to characters page to see the new character
                 window.location.href = 'characters.html';
             }, 1500);
         }
+        
+        // Initialize preview on page load
+        document.addEventListener('DOMContentLoaded', updatePreview);
+        
+        // Add parallax effect to floating elements
+        document.addEventListener('mousemove', (e) => {
+            const floating = document.querySelectorAll('.floating-element');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            floating.forEach(element => {
+                const speed = element.getAttribute('data-speed') || 30;
+                const x = (window.innerWidth - (mouseX * speed));
+                const y = (window.innerHeight - (mouseY * speed));
+                element.style.transform = `translate(${-x/50}px, ${-y/50}px)`;
+            });
+        });
     </script>
 </body>
 </html>
