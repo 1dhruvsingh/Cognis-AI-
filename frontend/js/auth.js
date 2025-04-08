@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (serverAvailable) {
                     // Import API base URL from config
-                    const API_BASE_URL = 'http://localhost:3000';
+                    const API_BASE_URL = 'http://localhost:8000';
                     // Server-side authentication (original code)
                     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                         method: 'POST',
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (serverAvailable) {
                     // Import API base URL from config
-                    const API_BASE_URL = 'http://localhost:3000';
+                    const API_BASE_URL = 'http://localhost:8000';
                     // Server-side registration (original code)
                     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                         method: 'POST',

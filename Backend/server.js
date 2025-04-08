@@ -25,14 +25,26 @@ connectDB();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Middleware
-app.use(cors({
-    origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../')));
+
+// Serve static files from the frontend directory
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Serve HTML files from the frontend/html directory
+app.get('/:page.html', (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(__dirname, `../frontend/html/${page}.html`));
+});
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+});
+
+// Serve index.html for undefined routes (except /api)
+app.get(/^(?!\/api).+/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+});
 
 // Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';

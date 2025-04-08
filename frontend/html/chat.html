@@ -57,12 +57,23 @@
             <div class="chat-interface">
             <div class="chat-messages" id="chatMessages">
                 <!-- Messages will be added here dynamically -->
-                <div class="message bot-message">
+                <div class="message bot-message animate__animated animate__fadeInUp">
                     <div class="message-avatar">
                         <i class="fas fa-robot"></i>
                     </div>
                     <div class="message-content">
                         <p>Hello! I'm your AI study assistant. How can I help you today?</p>
+                    </div>
+                </div>
+                <!-- Typing indicator -->
+                <div class="typing-indicator bot-message" style="display: none;">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
                 </div>
             </div>

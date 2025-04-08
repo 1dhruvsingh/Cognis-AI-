@@ -7,6 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="../Styles/style.css">
+    <link rel="stylesheet" href="../Styles/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -42,7 +43,7 @@
             <h1 class="gradient-text">Your Perfect AI Companion</h1>
             <p class="subtitle scroll-animate">Create and interact with unique AI characters tailored to your interests and learning goals.</p>
             <div class="hero-buttons scroll-animate">
-                <a href="create.html" class="btn btn-primary glow animate__animated animate__pulse animate__infinite">
+                <a href="create.html" class="btn btn-primary glow pulse-animation">
                     <i class="fas fa-magic"></i> Create Your Character
                 </a>
                 <a href="characters.html" class="btn btn-secondary animate__animated animate__fadeIn">
@@ -52,29 +53,199 @@
         </div>
     </section>
 
-    <script src="particles-config.js"></script>
+    <!-- Chat Interface Section (inspired by Front.com) -->
+    <section class="chat-showcase scroll-animate reveal-section">
+        <div class="section-header">
+            <h2 class="gradient-text">Seamless AI Conversations</h2>
+            <p class="subtitle">Experience natural, intelligent conversations with our advanced AI assistants</p>
+        </div>
+        <div class="chat-interface-showcase">
+            <div class="chat-demo-card">
+                <div class="chat-header">
+                    <div class="chat-status"><span class="status-dot"></span>Live chat</div>
+                    <div class="chat-user">Ben Jones</div>
+                </div>
+                <div class="chat-title">Chat Conversation with Jane Quinn</div>
+                <div class="chat-messages">
+                    <div class="user-message">
+                        <div class="message-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane"></div>
+                        <div class="message-content">
+                            <div class="message-sender">Jane Quinn</div>
+                            <div class="message-text">Hello, I need to add a family member to the policy</div>
+                        </div>
+                    </div>
+                    <div class="ai-message">
+                        <div class="message-content">
+                            <div class="message-sender">DriveSafe AI</div>
+                            <div class="message-text">No problem, let me connect you with a team member.</div>
+                        </div>
+                    </div>
+                    <div class="handoff-indicator">
+                        <i class="fas fa-exchange-alt"></i> Assigned to Ben Jones
+                    </div>
+                    <div class="agent-message">
+                        <div class="message-avatar"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Ben"></div>
+                        <div class="message-content">
+                            <div class="message-sender">Ben Jones</div>
+                            <div class="message-text">Hi! I'm Ben on our support team. Are you looking to add a family member as a qualified driver?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Reply to Jane..." disabled>
+                </div>
+            </div>
+            <div class="chat-features scroll-animate-right">
+                <div class="feature-item stagger-item">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI-Powered First Response</h3>
+                    <p>Our AI quickly understands and responds to common queries</p>
+                </div>
+                <div class="feature-item stagger-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>Seamless Human Handoff</h3>
+                    <p>When needed, transition to human support without losing context</p>
+                </div>
+                <div class="feature-item stagger-item">
+                    <i class="fas fa-history"></i>
+                    <h3>Conversation Memory</h3>
+                    <p>AI remembers past interactions for personalized assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Assistance Section (inspired by Front.com) -->
+    <section class="smart-assistance scroll-animate reveal-section">
+        <div class="section-header">
+            <h2 class="gradient-text">Smart Customer Assistance</h2>
+            <p class="subtitle">Our AI understands customer needs and provides intelligent guidance</p>
+        </div>
+        <div class="assistance-showcase">
+            <div class="phone-mockup scroll-animate-left">
+                <div class="phone-screen">
+                    <div class="product-ad">
+                        <h3>Need a new coat?</h3>
+                        <p>Our luxe Vegan Winter Wrap Coat has your name all over it.</p>
+                        <button class="shop-btn">SHOP NOW</button>
+                    </div>
+                    <div class="chat-window">
+                        <div class="chat-window-header">
+                            <div class="store-avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Store"></div>
+                            <div class="store-name">The Coat Shop</div>
+                        </div>
+                        <div class="chat-rating">
+                            <i class="far fa-star"></i> Rate this conversation
+                        </div>
+                        <div class="chat-messages">
+                            <div class="store-message">
+                                <div class="message-avatar"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Store"></div>
+                                <div class="message-text">Hi! What are you shopping for today?</div>
+                            </div>
+                        </div>
+                        <div class="quick-replies">
+                            <button class="quick-reply">Jacket</button>
+                            <button class="quick-reply">Long Coat</button>
+                            <button class="quick-reply active">Parker</button>
+                            <button class="quick-reply">Show me everything</button>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Message..." disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="assistance-flow scroll-animate-right">
+                <div class="flow-step stagger-item">
+                    <div class="flow-icon"><i class="far fa-clock"></i></div>
+                    <div class="flow-text">Time spent on site</div>
+                    <div class="flow-value">60 seconds</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step stagger-item">
+                    <div class="flow-icon"><i class="far fa-comment-dots"></i></div>
+                    <div class="flow-text">Offer assistance</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step stagger-item">
+                    <div class="flow-icon"><i class="far fa-user"></i></div>
+                    <div class="flow-text">Visitor opts for 'Parka'</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step stagger-item">
+                    <div class="flow-icon"><i class="fas fa-tag"></i></div>
+                    <div class="flow-text">Suggest 'Best Selling Parkas'</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI vs Traditional Chatbot Section -->
+    <section class="chatbot-comparison scroll-animate reveal-section">
+        <div class="section-header">
+            <h2 class="gradient-text">Next-Generation AI Chatbots</h2>
+            <p class="subtitle">See how our advanced AI chatbots outperform traditional solutions</p>
+        </div>
+        <div class="comparison-container">
+            <div class="comparison-image scroll-animate-left">
+                <img src="https://cdn-kjmjf.nitrocdn.com/NRzOqcROzQgntTeefoiplyairyrMFAiv/assets/images/optimized/rev-fc08a75/govivace.com/wp-content/uploads/2023/11/AI-Chatbot-vs-Traditional-Chatbot-768x409.png" alt="AI vs Traditional Chatbots" class="responsive-img">
+            </div>
+            <div class="comparison-features scroll-animate-right">
+                <div class="feature-column">
+                    <h3><i class="fas fa-robot"></i> Traditional Chatbots</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-times"></i> Limited to predefined scripts</li>
+                        <li><i class="fas fa-times"></i> Struggles with complex queries</li>
+                        <li><i class="fas fa-times"></i> No contextual understanding</li>
+                        <li><i class="fas fa-times"></i> Frustrating user experience</li>
+                    </ul>
+                </div>
+                <div class="feature-column highlight">
+                    <h3><i class="fas fa-brain"></i> Cognis AI Chatbots</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Natural language understanding</li>
+                        <li><i class="fas fa-check"></i> Learns from conversations</li>
+                        <li><i class="fas fa-check"></i> Maintains context across sessions</li>
+                        <li><i class="fas fa-check"></i> Human-like interaction</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/particles-config.js"></script>
+    <script src="../js/scroll-animations.js"></script>
     
-    <!-- Add scroll animation script -->
+    <!-- Chat typing animation demo script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate__animated', 'animate__fadeInUp');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.scroll-animate').forEach(element => {
-            observer.observe(element);
-        });
+        // Simulate chat typing effect for demo purposes
+        setTimeout(() => {
+            const chatMessages = document.querySelector('.chat-messages');
+            if (chatMessages) {
+                // Add typing indicator
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+                chatMessages.appendChild(typingIndicator);
+                
+                // Remove typing indicator and add new message after delay
+                setTimeout(() => {
+                    typingIndicator.remove();
+                    
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'user-message';
+                    userMessage.innerHTML = `
+                        <div class="message-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane"></div>
+                        <div class="message-content">
+                            <div class="message-sender">Jane Quinn</div>
+                            <div class="message-text">Yes, I'd like to add my son who just got his license.</div>
+                        </div>
+                    `;
+                    chatMessages.appendChild(userMessage);
+                }, 2000);
+            }
+        }, 3000);
     });
     </script>
 </body>
