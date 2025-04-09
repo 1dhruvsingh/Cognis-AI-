@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Cognis AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="../Styles/style.css">
+    <link rel="stylesheet" href="../Styles/auth.css">
+    <link rel="stylesheet" href="../Styles/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add admin auth check -->
+    <script src="../js/admin.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="neural-bg"></div>
+    <div class="gradient-overlay"></div>
+    
+    <!-- Enhanced floating background elements -->
+    <div class="floating-element floating-circle" style="top: 15%; left: 10%;" data-speed="20"></div>
+    <div class="floating-element floating-circle" style="top: 65%; right: 12%;" data-speed="30"></div>
+    <div class="floating-element floating-circle" style="top: 40%; left: 80%;" data-speed="25"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Cognis.ai</a>
+            <div class="nav-links animate__animated animate__fadeIn">
+                <a href="admin.html" class="active"><i class="fas fa-user-shield"></i> Admin</a>
+                <a href="#" onclick="adminLogout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="admin-container">
+        <div class="admin-header">
+            <h2 class="gradient-text animate__animated animate__fadeInDown">Admin Dashboard</h2>
+            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Manage users and system settings</p>
+        </div>
+        
+        <div class="admin-panel">
+            <div class="admin-sidebar">
+                <div class="admin-profile">
+                    <div class="admin-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="admin-name">Administrator</div>
+                </div>
+                <div class="admin-menu">
+                    <button class="menu-item active" data-tab="users">
+                        <i class="fas fa-users"></i> Users
+                    </button>
+                    <button class="menu-item" data-tab="stats">
+                        <i class="fas fa-chart-bar"></i> Statistics
+                    </button>
+                    <button class="menu-item" data-tab="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+            
+            <div class="admin-content">
+                <!-- Users Tab -->
+                <div class="admin-tab active" id="users-tab">
+                    <div class="tab-header">
+                        <h3><i class="fas fa-users"></i> Registered Users</h3>
+                        <div class="search-bar">
+                            <input type="text" id="userSearch" placeholder="Search users...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="users-table-container">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Registered</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody">
+                                <!-- User rows will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Statistics Tab -->
+                <div class="admin-tab" id="stats-tab">
+                    <h3><i class="fas fa-chart-bar"></i> System Statistics</h3>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalUsers">0</div>
+                                <div class="stat-label">Total Users</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalCharacters">0</div>
+                                <div class="stat-label">Characters</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalChats">0</div>
+                                <div class="stat-label">Chats</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="admin-tab" id="settings-tab">
+                    <h3><i class="fas fa-cog"></i> System Settings</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="systemMaintenance">
+                                <i class="fas fa-tools"></i> Maintenance Mode
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="systemMaintenance">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userRegistration">
+                                <i class="fas fa-user-plus"></i> Allow New Registrations
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="userRegistration" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="saveSettings">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/particles-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const menuItems = document.querySelectorAll('.menu-item');
+            const adminTabs = document.querySelectorAll('.admin-tab');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const tabId = item.getAttribute('data-tab');
+                    
+                    // Update active menu item
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Show selected tab
+                    adminTabs.forEach(tab => {
+                        tab.classList.remove('active');
+                        if (tab.id === `${tabId}-tab`) {
+                            tab.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Load users data
+            loadUsers();
+            
+            // Search functionality
+            const userSearch = document.getElementById('userSearch');
+            userSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const userRows = document.querySelectorAll('#userTableBody tr');
+                
+                userRows.forEach(row => {
+                    const name = row.querySelector('td:first-child').textContent.toLowerCase();
+                    const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Save settings button
+            const saveSettings = document.getElementById('saveSettings');
+            saveSettings.addEventListener('click', function() {
+                const maintenance = document.getElementById('systemMaintenance').checked;
+                const registration = document.getElementById('userRegistration').checked;
+                
+                // Save settings to localStorage
+                localStorage.setItem('adminSettings', JSON.stringify({
+                    maintenance,
+                    registration
+                }));
+                
+                // Show success message
+                alert('Settings saved successfully!');
+            });
+            
+            // Load settings from localStorage
+            const savedSettings = JSON.parse(localStorage.getItem('adminSettings') || '{}');
+            if (savedSettings.maintenance !== undefined) {
+                document.getElementById('systemMaintenance').checked = savedSettings.maintenance;
+            }
+            if (savedSettings.registration !== undefined) {
+                document.getElementById('userRegistration').checked = savedSettings.registration;
+            }
+            
+            // Update statistics
+            updateStats();
+        });
+        
+        // Function to load users
+        function loadUsers() {
+            const userTableBody = document.getElementById('userTableBody');
+            const users = JSON.parse(localStorage.getItem('demoUsers') || '[]');
+            
+            // Clear existing rows
+            userTableBody.innerHTML = '';
+            
+            if (users.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = '<td colspan="4" class="empty-message">No users found</td>';
+                userTableBody.appendChild(emptyRow);
+                return;
+            }
+            
+            // Add user rows
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${new Date(user.createdAt || Date.now()).toLocaleDateString()}</td>
+                    <td class="actions">
+                        <button class="action-btn view-btn" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn delete-btn" title="Delete User" onclick="deleteUser('${user.email}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                userTableBody.appendChild(row);
+            });
+        }
+        
+        // Function to delete user
+        function deleteUser(email) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                let users = JSON.parse(localStorage.getItem('demoUsers') || '[]');
+                users = users.filter(user => user.email !== email);
+                localStorage.setItem('demoUsers', JSON.stringify(users));
+                
+                // Reload users table
+                loadUsers();
+                
+                // Update statistics
+                updateStats();
+                
+                alert('User deleted successfully!');
+            }
+        }
+        
+        // Function to update statistics
+        function updateStats() {
+            const users = JSON.parse(localStorage.getItem('demoUsers') || '[]');
+            const characters = JSON.parse(localStorage.getItem('subjects') || '[]');
+            const chats = 0; // In a real app, you would count chats from database
+            
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalCharacters').textContent = characters.length;
+            document.getElementById('totalChats').textContent = chats;
+        }
+        
+        // Function to logout admin
+        function adminLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

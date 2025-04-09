@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const email = emailInput.value;
             const password = passwordInput.value;
+            const isAdminLogin = document.getElementById('adminLogin') && document.getElementById('adminLogin').checked;
             
             // Validate form before submission
             let isValid = true;
@@ -100,6 +101,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             } else {
                 clearInputError(passwordInput);
+            }
+            
+            // Check if this is an admin login attempt
+            if (isAdminLogin) {
+                if (email === 'admin@gmail.com' && password === 'admin') {
+                    // Set admin login flag in localStorage
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    // Redirect to admin dashboard
+                    window.location.href = 'admin.html';
+                    return;
+                } else {
+                    // Show admin login error
+                    showInputError(passwordInput, 'Invalid admin credentials');
+                    return;
+                }
             }
             
             // If validation fails, stop form submission

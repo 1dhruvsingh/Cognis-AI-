@@ -21,6 +21,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Chat history
     let chatHistory = [];
     
+    // Variables for scroll position tracking
+    let isScrolling = false;
+    let lastScrollTop = 0;
+    let scrollTimeout;
+    
+    // Add scroll event listener to chat messages container
+    chatMessages.addEventListener('scroll', function() {
+        isScrolling = true;
+        clearTimeout(scrollTimeout);
+        
+        // Save scroll position
+        lastScrollTop = chatMessages.scrollTop;
+        
+        // Set a timeout to detect when scrolling stops
+        scrollTimeout = setTimeout(function() {
+            isScrolling = false;
+        }, 100);
+    });
+    
     // Load chat history from localStorage if available
     const savedHistory = localStorage.getItem('chatHistory');
     if (savedHistory) {
@@ -30,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
             chatHistory.forEach(message => {
                 addMessageToUI(message.sender, message.text);
             });
+            
+            // Scroll to bottom after loading messages
+            scrollToBottom();
         } catch (error) {
             console.error('Error loading chat history:', error);
             // Reset history if there's an error
@@ -40,6 +62,43 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Import API base URL from config
     const API_BASE_URL = 'http://localhost:3000';
+    
+    // Function to scroll chat to bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Function to save message to database
+    async function saveMessageToDatabase(chatId, message) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/chat/${chatId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(message)
+            });
+            
+            if (!response.ok) {
+                console.error('Failed to save message to database');
+                // If server request fails, still save locally
+                saveMessageLocally(message);
+            }
+            return response.ok;
+        } catch (error) {
+            console.error('Error saving message to database:', error);
+            // If server request fails, still save locally
+            saveMessageLocally(message);
+            return false;
+        }
+    }
+    
+    // Function to save message locally
+    function saveMessageLocally(message) {
+        chatHistory.push(message);
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
     
     // Load chat history from server
     async function loadChatHistory() {
@@ -404,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageDiv = document.createElement('div');
         // Check if sender is 'bot' or a user name
         const isBot = sender === 'bot';
-        messageDiv.className = `message ${isBot ? 'bot' : 'user'}-message`;
+        messageDiv.className = `message ${isBot ? 'bot' : 'user'}-message animate__animated animate__fadeInUp`;
         
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'message-avatar';
@@ -435,8 +494,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         chatMessages.appendChild(messageDiv);
         
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Determine if we should auto-scroll based on user's current scroll position
+        // Auto-scroll if: it's a user message OR user was already at the bottom (within 100px)
+        const shouldScroll = 
+            !isBot || 
+            (chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight < 100);
+        
+        if (shouldScroll) {
+            scrollToBottom();
+        }
+        
+        // Save message to database if we have a current chat ID
+        if (window.currentChatId) {
+            saveMessageToDatabase(window.currentChatId, { sender, text });
+        } else {
+            // Just save locally if no chat ID yet
+            saveMessageLocally({ sender, text });
+        }
     }
     
     // Show typing indicator

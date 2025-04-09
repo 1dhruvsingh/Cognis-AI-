@@ -9,7 +9,9 @@ function saveSubject(subjectData) {
     const newSubject = {
         ...subjectData,
         id: 'subject_' + Date.now(),
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        // Ensure we have an image property, use default if not provided
+        image: subjectData.image || '../Images/image3.png'
     };
     
     // Add new subject to array
@@ -17,6 +19,11 @@ function saveSubject(subjectData) {
     
     // Save updated array back to localStorage
     localStorage.setItem('subjects', JSON.stringify(subjects));
+    
+    // After saving, redirect to characters page if redirectAfterSave is true
+    if (subjectData.redirectAfterSave) {
+        window.location.href = 'characters.html';
+    }
     
     return newSubject;
 }
